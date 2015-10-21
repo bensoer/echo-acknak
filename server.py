@@ -3,10 +3,10 @@ __author__ = 'bensoer'
 from socket import *
 
 '''
-Server defines all the functionality for the server in the echo-acknak demo project. It created a UDP socket which
-it listens for requests, checking incoming ones if they are searching for valid IP and port numbers in thier payload
-and then returns an ACK or NAK deoending if they are valid. It also sends a UDP hello message on ACK to the specified
-IP and port in the payload
+Server defines all the functionality for the server in the echo-acknak demo project. It creates a UDP socket which
+listens for requests and checks if they are searching for valid IP and port numbers in thier payload. If it is valid
+an ACK is returned, otherwise a NAK. If the ip is valid a UDP hello message is sent to the specified IP and port in
+the payload
 '''
 class Server:
 
@@ -18,7 +18,7 @@ class Server:
         self.__buffer = 2048
 
     '''
-    startListening starts the server to listen onto the port and be ready to process incoming requests
+    startListening starts the server to listen on the port and be ready to process incoming requests
     '''
     def startListening(self):
         self.__printStatus("Server Is Now Actively Listening For Requests")
@@ -41,7 +41,7 @@ class Server:
     '''
     sendResponse sends a response back to the calling client depending on whether it is an ACK or NAK response needed
     :param type: the type of response to be returned. Valid values are 'ACK' and 'NAK'
-    :param clientAddress: the client address object from recieving the UDP request
+    :param clientAddress: the client address object from receiving the UDP request
     '''
     def __sendResponse(self,type, clientAddress):
         if(type == "ACK"):
