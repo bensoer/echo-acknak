@@ -2,7 +2,10 @@ __author__ = 'bensoer'
 
 from client import Client
 
-message = "127.0.0.1:8888"
-client = Client()
-client.lockCycles()
-client.checkWithServer(8000,'localhost', message)
+while True:
+
+    print("Enter A Valid IP To Check With The Server")
+    message = input()
+    client = Client()
+    client.sendRequest(8000,'localhost', message)
+    client.closeConnection()
