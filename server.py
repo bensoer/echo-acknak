@@ -1,6 +1,7 @@
 __author__ = 'bensoer'
 
 from socket import *
+from socketsystem import SocketSystem
 
 '''
 Server defines all the functionality for the server in the echo-acknak demo project. It creates a UDP socket which
@@ -8,14 +9,18 @@ listens for requests and checks if they are searching for valid IP and port numb
 an ACK is returned, otherwise a NAK. If the ip is valid a UDP hello message is sent to the specified IP and port in
 the payload
 '''
-class Server:
+class Server(SocketSystem):
 
     def __init__(self):
+        SocketSystem.__init__(self)
+
         self.__validServers = ["127.0.0.1:8888"]
 
-        self.__serverSocket = socket(AF_INET, SOCK_DGRAM)
-        self.__serverSocket.bind(('localhost', 8000))
-        self.__buffer = 2048
+        #self.__serverSocket = socket(AF_INET, SOCK_DGRAM)
+        #self.__serverSocket.bind(('localhost', 8000))
+        #self.__buffer = 2048
+
+        self.bindSocket('localhost', 8000);
 
     '''
     startListening starts the server to listen on the port and be ready to process incoming requests
@@ -24,7 +29,8 @@ class Server:
         self.__printStatus("Server Is Now Actively Listening For Requests")
 
         while True:
-            message, clientAddress = self.__serverSocket.recvfrom(self.__buffer)
+            #message, clientAddress = self.__serverSocket.recvfrom(self.__buffer)
+            message, clientAddress = self.recieveMessage()
             message = message.decode()
             print("Server Recieved A Message: " + message)
             print("Checking if It Is Valid")
@@ -46,13 +52,16 @@ class Server:
     def __sendResponse(self,type, clientAddress):
         if(type == "ACK"):
             print("It Is Valid. Sending Back ACK")
-            self.__serverSocket.sendto("ACK".encode(), clientAddress)
+            #self.__serverSocket.sendto("ACK".encode(), clientAddress)
+            self.sendMessage("ACK".encode(), clientAddress)
         elif(type == "NAK"):
             print("It Is Invalid. Sending Back NAK")
-            self.__serverSocket.sendto("NAK".encode(), clientAddress)
+            #self.__serverSocket.sendto("NAK".encode(), clientAddress)
+            self.sendMessage("NAK".encode(), clientAddress)
 
     def __sendHello(self, port, ip):
-        self.__serverSocket.sendto("Hello!".encode(), (ip, int(port)))
+        #self.__serverSocket.sendto("Hello!".encode(), (ip, int(port)))
+        self.sendMessage("Hello!".encode(), (ip, int(port)))
 
 
     '''

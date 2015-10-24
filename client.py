@@ -1,16 +1,19 @@
 __author__ = 'bensoer'
 
-from socket import *
+from socketsystem import SocketSystem
 
 '''
 Client defines the client functions for the echo-acknak demo system
 '''
-class Client:
+class Client(SocketSystem):
 
     def __init__(self):
-        self.__clientSocket = socket(AF_INET, SOCK_DGRAM)
-        self.__clientSocket.bind(('localhost', 7000))
-        self.__buffer = 2048
+        SocketSystem.__init__(self)
+
+        self.bindSocket('localhost', 7000)
+        #self.__clientSocket = socket(AF_INET, SOCK_DGRAM)
+        #self.__clientSocket.bind(('localhost', 7000))
+        #self.__buffer = 2048
 
 
     '''
@@ -23,10 +26,12 @@ class Client:
     def sendRequest(self, portNumber, ip, message):
         print("Checking with The Server")
 
-        self.__clientSocket.sendto(message.encode(), (ip, portNumber))
+        #self.__clientSocket.sendto(message.encode(), (ip, portNumber))
+        self.sendMessage(message.encode(), (ip, portNumber))
         print("Sent - Waiting on Response")
 
-        response, serverAddress = self.__clientSocket.recvfrom(self.__buffer)
+        #response, serverAddress = self.__clientSocket.recvfrom(self.__buffer)
+        response, serverAddress = self.recieveMessage()
         print("Response Arrived")
         print(response.decode())
 
@@ -35,7 +40,7 @@ class Client:
     request
     '''
     def closeConnection(self):
-        self.__clientSocket.close()
+        self.closeSocketConnection()
 
 
 
